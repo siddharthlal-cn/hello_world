@@ -1,21 +1,26 @@
-import numpy as np
+from flask import Flask, request, render_template,jsonify
+app = Flask(__name__)
+def string_join(text1,text2):
+   text1 = text1.upper()
+   text2 = text2.upper()
+   combine = text1 +text2
+   return combine
 
-if __name__ == "__main__"
-    R = int(input("Enter the number of rows:"))
-    C = int(input("Enter the number of columns:"))
+@app.route('/')
+def home():
+    return render_template('home.html')
 
-    # Initialize matrix
-    matrix = []
-    print("Enter the entries rowwise:")
+@app.route('/join', methods=['GET','POST'])
+def my_form_post():
+    text1 = request.form['text1']
+    word = request.args.get('text1')
+    text2 = request.form['text2']
+    combine = string_join(text1,text2)
+    result = {
+        "output": combine
+    }
+    result = {str(key): value for key, value in result.items()}
+    return jsonify(result=result)
 
-    # For user input
-    for i in range(R):          # A for loop for row entries
-        a =[]
-        for j in range(C):      # A for loop for column entries
-             a.append(int(input()))
-        matrix.append(a)
-
-
-    b = np.array(a)
-
-    print(np.linalg.inv(b))
+if __name__ == '__main__':
+    app.run()
